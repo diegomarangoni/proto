@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package service.namespace.name.v1;
 
-option go_package = "github.com/diegomarangoni/gomonorepo/pkg/pb/service/namespace/name/v1;name";
+option go_package = "diegomarangoni.dev/go/pkg/pb/service/namespace/name/v1;name";
 
 service Example {
   rpc HelloWorld(HelloWorldRequest) returns (HelloWorldResponse) {}
