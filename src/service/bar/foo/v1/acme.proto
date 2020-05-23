@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package service.foo.bar.v1;
+package service.bar.foo.v1;
 
-option go_package = "diegomarangoni.dev/go/pkg/pb/service/foo/bar/v1;bar";
+option go_package = "diegomarangoni.dev/go/pkg/pb/service/bar/foo/v1;foo";
 
 service Acme {
   rpc Ping(PingRequest) returns (PongResponse) {}
