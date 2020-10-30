@@ -1,0 +1,10 @@
+version: v1beta1
+build:
+  roots:
+    - src
+lint:
+  use:
+    - BASIC
+breaking:
+  use:
+    - PACKAGE

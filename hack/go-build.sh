@@ -1,33 +1,29 @@
 #!/bin/bash
 
 set -e
-
 cd "$(dirname ${0})/.."
 
-if [[ -z "$1" ]]; then
-    echo "Missing Go project root. eg.: $0 path/to/diegomarangoni/go"
+buf check lint
+buf check breaking --against-input .git#branch=master
+
+tmpDir=$(mktemp -d)
+goProject=$1
+goModules="diegomarangoni.dev/go"
+
+if [ ! -d "$1" ]; then
+    echo "Invalid Go project root. eg.: $0 path/to/go/project"
     exit 1
 fi
 
-if [[ -z $(sed -n '/^module diegomarangoni.dev\/go/p;q' $1/go.mod) ]]; then
-    echo 'Path does not look like "diegomarangoni/go" project'
+if ! grep -q "module $goModules" "$1/go.mod"; then
+    echo "Path does not look like '$goModules' project"
     exit 1
 fi
 
-PROJECT_ROOT=$1
-OUTPUT_PATH=$(mktemp -d)
-PROTOC_ARGS=""
+buf generate --output $tmpDir
 
-PROTOC_ARGS+=" -I src"
-#PROTOC_ARGS+=" -I third_party/googleapis"
-
-find src/ -name "*.proto" -type f -exec protoc $PROTOC_ARGS {} --go_out=plugins=grpc:$OUTPUT_PATH \;
-
-mkdir -p $PROJECT_ROOT/pkg/pb/
-rm -rf $PROJECT_ROOT/pkg/pb/*
-
-cp -R $OUTPUT_PATH/diegomarangoni.dev/go/pkg/pb/* $PROJECT_ROOT/pkg/pb/
-
-rm -rf $OUTPUT_PATH
+cp -R $tmpDir/$goModules/* $goProject/
+rm -rf $tmpDir
 
 echo "Go go go :)"
+exit 0
