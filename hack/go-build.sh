@@ -22,7 +22,7 @@ fi
 
 buf generate --output $tmpDir
 
-cp -R $tmpDir/$goModules/* $goProject/
+cp -R $tmpDir/go/$goModules/* $goProject/
 rm -rf $tmpDir
 
 echo "Go go go :)"
